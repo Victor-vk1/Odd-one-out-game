@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Odd One Out - Life Edition</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+    body {
+      margin:0; padding:0;
+      background: #0a0a0a;
+      color: white;
+      font-family: 'Roboto', sans-serif;
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 30px;
+      font-size: 50px;
+      color: #ff6a00;
+      text-shadow: 0 0 15px #ff6a00, 0 0 30px #ff0000;
+    }
+
+    #questionBox {
+      background: rgba(20,0,0,0.7);
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 0 25px #ff6a00, 0 0 50px #ff0000;
+    }
+
+    .option {
+      background: #330000;
+      margin: 15px 0;
+      padding: 15px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 22px;
+      transition: 0.3s;
+      color: #ff9c00;
+      font-weight: bold;
+      box-shadow: 0 0 15px #ff6a00, 0 0 30px #ff0000;
+    }
+
+    .option:hover {
+      background: #660000;
+      color: #fff200;
+      box-shadow: 0 0 25px #ff6a00, 0 0 50px #ff0000;
+    }
+
+    #feedback {
+      font-size: 24px;
+      margin-top: 20px;
+      min-height: 30px;
+      font-weight: bold;
+    }
+
+    #timer {
+      font-size: 22px;
+      margin-top: 10px;
+      color: #ff3f00;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Odd One Out</h1>
+
+<div id="questionBox">
+  <div id="question">Loading question...</div>
+  <div id="options"></div>
+  <div id="timer">Time: 10s</div>
+  <div id="feedback"></div>
+</div>
+
+<script>
+let questions = [
+  {q:"Which is the odd one out?", options:["Apple","Banana","Carrot","Orange"], answer:"Carrot"},
+  {q:"Which is the odd one out?", options:["Table","Chair","Lamp","Spoon"], answer:"Spoon"},
+  {q:"Which is the odd one out?", options:["Red","Blue","Green","Dog"], answer:"Dog"},
+  {q:"Which is the odd one out?", options:["Football","Basketball","Tennis","Dog"], answer:"Dog"},
+  {q:"Which is the odd one out?", options:["Mercury","Venus","Earth","Car"], answer:"Car"},
+  {q:"Which is the odd one out?", options:["Monday","Tuesday","January","Wednesday"], answer:"January"},
+  {q:"Which is the odd one out?", options:["Cat","Dog","Rabbit","Chair"], answer:"Chair"},
+  {q:"Which is the odd one out?", options:["Rose","Tulip","Car","Lily"], answer:"Car"},
+  {q:"Which is the odd one out?", options:["Car","Bus","Train","Apple"], answer:"Apple"},
+  {q:"Which is the odd one out?", options:["Pen","Pencil","Notebook","Car"], answer:"Car"},
+  {q:"Which is the odd one out?", options:["Water","Milk","Juice","Shoe"], answer:"Shoe"},
+  {q:"Which is the odd one out?", options:["Shirt","Pants","Hat","Table"], answer:"Table"},
+  {q:"Which is the odd one out?", options:["Tiger","Lion","Elephant","Chair"], answer:"Chair"},
+  {q:"Which is the odd one out?", options:["Earth","Mars","Moon","Banana"], answer:"Banana"},
+  {q:"Which is the odd one out?", options:["Carrot","Potato","Tomato","Chair"], answer:"Chair"},
+  {q:"Which is the odd one out?", options:["Circle","Square","Triangle","Apple"], answer:"Apple"},
+  {q:"Which is the odd one out?", options:["Pen","Marker","Paper","Dog"], answer:"Dog"},
+  {q:"Which is the odd one out?", options:["Blue","Yellow","Red","Chair"], answer:"Chair"},
+  {q:"Which is the odd one out?", options:["Knife","Fork","Spoon","Tree"], answer:"Tree"},
+  {q:"Which is the odd one out?", options:["Soccer","Basketball","Laptop","Tennis"], answer:"Laptop"},
+  {q:"Which is the odd one out?", options:["Pineapple","Mango","Carrot","Banana"], answer:"Carrot"},
+  {q:"Which is the odd one out?", options:["Shampoo","Soap","Toothpaste","Chair"], answer:"Chair"},
+  {q:"Which is the odd one out?", options:["Rose","Sunflower","Cactus","Car"], answer:"Car"},
+  {q:"Which is the odd one out?", options:["Eagle","Parrot","Dog","Lion"], answer:"Dog"},
+  {q:"Which is the odd one out?", options:["January","February","Chair","March"], answer:"Chair"},
+  {q:"Which is the odd one out?", options:["Coffee","Tea","Milk","Laptop"], answer:"Laptop"},
+  {q:"Which is the odd one out?", options:["Shirt","Socks","Pants","Car"], answer:"Car"},
+  {q:"Which is the odd one out?", options:["Chair","Table","Lamp","Banana"], answer:"Banana"},
+  {q:"Which is the odd one out?", options:["Earth","Mars","Venus","Apple"], answer:"Apple"},
+  {q:"Which is the odd one out?", options:["Tiger","Lion","Elephant","Book"], answer:"Book"},
+  {q:"Which is the odd one out?", options:["Pen","Notebook","Marker","Dog"], answer:"Dog"},
+  {q:"Which is the odd one out?", options:["Car","Bus","Train","Orange"], answer:"Orange"},
+  {q:"Which is the odd one out?", options:["Spoon","Fork","Knife","Cat"], answer:"Cat"},
+  {q:"Which is the odd one out?", options:["Red","Blue","Green","Chair"], answer:"Chair"},
+  {q:"Which is the odd one out?", options:["Soccer","Basketball","Tennis","Car"], answer:"Car"},
+  {q:"Which is the odd one out?", options:["Shirt","Hat","Pants","Apple"], answer:"Apple"},
+  {q:"Which is the odd one out?", options:["Milk","Juice","Water","Table"], answer:"Table"},
+  {q:"Which is the odd one out?", options:["Rose","Tulip","Lily","Laptop"], answer:"Laptop"},
+  {q:"Which is the odd one out?", options:["Cat","Dog","Rabbit","Car"], answer:"Car"},
+  {q:"Which is the odd one out?", options:["Circle","Square","Triangle","Banana"], answer:"Banana"},
+  {q:"Which is the odd one out?", options:["Knife","Fork","Spoon","Chair"], answer:"Chair"}
+];
+
+let current = 0;
+let correctStreak = 0;
+let timeLeft = 10;
+let timerInterval;
+
+function loadQuestion() {
+  let q = questions[current];
+  document.getElementById("question").innerText = q.q;
+
+  let optionsBox = document.getElementById("options");
+  optionsBox.innerHTML = "";
+  q.options.forEach(option => {
+    let div = document.createElement("div");
+    div.className = "option";
+    div.innerText = option;
+    div.onclick = () => checkAnswer(option);
+    optionsBox.appendChild(div);
+  });
+
+  document.getElementById("feedback").innerText = "";
+  resetTimer();
+}
+
+function checkAnswer(selected) {
+  clearInterval(timerInterval);
+  let correct = questions[current].answer;
+  let feedback = document.getElementById("feedback");
+
+  document.querySelectorAll(".option").forEach(opt => opt.style.pointerEvents = "none");
+
+  if(selected === correct){
+    correctStreak++;
+    if(correctStreak < 3) feedback.innerText = "Great!";
+    else if(correctStreak === 3) feedback.innerText = "Fascinating!";
+    else feedback.innerText = "Superb!";
+    feedback.style.color = "#00ff00";
+    setTimeout(nextQuestion, 1200);
+  } else {
+    feedback.innerText = "Incorrect!";
+    feedback.style.color = "#ff0000";
+    setTimeout(() => location.reload(), 1500);
+  }
+}
+
+function nextQuestion() {
+  current++;
+  if(current >= questions.length) current = 0; // loop questions
+  loadQuestion();
+}
+
+function resetTimer() {
+  clearInterval(timerInterval);
+  timeLeft = 10;
+  document.getElementById("timer").innerText = "Time: " + timeLeft + "s";
+
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    document.getElementById("timer").innerText = "Time: " + timeLeft + "s";
+    if(timeLeft <= 0){
+      clearInterval(timerInterval);
+      document.getElementById("feedback").innerText = "Time's up! Restarting...";
+      document.getElementById("feedback").style.color = "#ff0000";
+      setTimeout(() => location.reload(), 1500);
+    }
+  }, 1000);
+}
+
+loadQuestion();
+</script>
+
+</body>
+</html>
